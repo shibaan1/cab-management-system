@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Manage Drivers{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-users"></i> Manage Drivers</h2>
+
+<a href="{{ url_for('add_driver') }}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Add Driver</a>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Name</th>
+                        <th>License</th>
+                        <th>Phone</th>
+                        <th>Rating</th>
+                        <th>Status</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for driver in drivers %}
+                    <tr>
+                        <td>{{ driver.user.first_name }} {{ driver.user.last_name }}</td>
+                        <td>{{ driver.license_no }}</td>
+                        <td>{{ driver.user.phone }}</td>
+                        <td><i class="fas fa-star text-warning"></i> {{ driver.rating }}</td>
+                        <td>
+                            <span class="badge bg-{% if driver.status == 'available' %}
+                                success{% elif driver.status == 'on_trip' %}
+                                info{% else %}
+                                secondary{% endif %}">
+                                {{ driver.status }}
+                            </span>
+                        </td>
+                        <td>{{ driver.user.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

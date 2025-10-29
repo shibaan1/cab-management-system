@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-chart-bar"></i> Reports & Analytics</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5>Total Revenue</h5>
+                <h2>₹{{ "%.0f"|format(revenue) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5>Total Trips</h5>
+                <h2>{{ trips }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5>Average Fare</h5>
+                <h2>₹{{ "%.0f"|format(avg) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5><i class="fas fa-file"></i> Report Summary</h5>
+    </div>
+    <div class="card-body">
+        <p>Total Revenue Generated: <strong>₹{{ "%.0f"|format(revenue) }}</strong></p>
+        <p>Total Completed Trips: <strong>{{ trips }}</strong></p>
+        <p>Average Fare per Trip: <strong>₹{{ "%.0f"|format(avg) }}</strong></p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Manage Cabs{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-car"></i> Manage Cabs</h2>
+
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCabModal"><i class="fas fa-plus"></i> Add Cab</button>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Registration</th>
+                        <th>Model</th>
+                        <th>Capacity</th>
+                        <th>Driver</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cab in cabs %}
+                    <tr>
+                        <td>{{ cab.registration_no }}</td>
+                        <td>{{ cab.model }}</td>
+                        <td>{{ cab.capacity }} seats</td>
+                        <td>{{ cab.assigned_driver.user.first_name if cab.assigned_driver else '-' }}</td>
+                        <td><span class="badge bg-{% if cab.status == 'available' %}success{% elif cab.status == 'on_trip' %}info{% else %}secondary{% endif %}">{{ cab.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCabModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5>Add New Cab</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('add_cab') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Registration Number</label>
+                        <input type="text" name="registration_no" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Model</label>
+                        <input type="text" name="model" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Capacity</label>
+                        <input type="number" name="capacity" class="form-control" value="4" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Assign Driver</label>
+                        <select name="driver_id" class="form-select">
+                            <option value="">-- Select Driver --</option>
+                            {% for driver in drivers %}
+                            <option value="{{ driver.id }}">{{ driver.user.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Cab</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

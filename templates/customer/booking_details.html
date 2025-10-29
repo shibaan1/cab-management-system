@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-list"></i> My Bookings</h2>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Pickup</th>
+                        <th>Dropoff</th>
+                        <th>Status</th>
+                        <th>Fare</th>
+                        <th>Driver</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>#{{ booking.id }}</td>
+                        <td>{{ booking.pickup_address[:20] }}</td>
+                        <td>{{ booking.dropoff_address[:20] }}</td>
+                        <td><span class="badge bg-{% if booking.status == 'completed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">{{ booking.status }}</span></td>
+                        <td>₹{{ booking.fare_estimate }}</td>
+                        <td>{{ booking.driver.user.first_name if booking.driver else '-' }}</td>
+                        <td>
+                            <a href="{{ url_for('booking_details', booking_id=booking.id) }}" class="btn btn-sm btn-info">View</a>
+                            {% if booking.status in ['pending', 'assigned'] %}
+                            <button class="btn btn-sm btn-danger" onclick="cancelBooking('{{ booking.id }}')">Cancel</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function cancelBooking(id) {
+    if (confirm('Cancel this booking?')) {
+        fetch(`/customer/cancel-booking/${id}`, {method: 'POST'}).then(r => r.json()).then(d => {
+            if (d.success) { location.reload(); } else { alert('Error'); }
+        });
+    }
+}
+</script>
+{% endblock %}

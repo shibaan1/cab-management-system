@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Trip History{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-history"></i> Trip History</h2>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>ID</th>
+                        <th>Pickup</th>
+                        <th>Dropoff</th>
+                        <th>Distance</th>
+                        <th>Fare</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trip in trips %}
+                    <tr>
+                        <td>#{{ trip.id }}</td>
+                        <td>{{ trip.pickup_address[:30] }}</td>
+                        <td>{{ trip.dropoff_address[:30] }}</td>
+                        <td>{{ trip.distance_km }} km</td>
+                        <td>₹{{ trip.fare_final }}</td>
+                        <td>{{ trip.completed_at.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

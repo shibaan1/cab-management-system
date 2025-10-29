@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cabby - Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: twinkle 3s infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% {opacity: 0.2;}
+      50% {opacity: 0.8;}
+    }
+    .register-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 500px;
+    }
+    .register-card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.6s ease-out;
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo-circle {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+    }
+    h2 {
+      color: #2d3748;
+      font-weight: 700;
+      margin-bottom: 5px;
+      font-size: 1.6rem;
+    }
+    .subtitle {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      color: #2d3748;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+      font-size: 0.85rem;
+    }
+    .form-control {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+      outline: none;
+    }
+    .form-control::placeholder {
+      color: #cbd5e1;
+    }
+    .register-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(102,126,234,0.4);
+    }
+    .register-btn:active {
+      transform: translateY(0);
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .login-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .login-link a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+    .alert {
+      border-radius: 12px;
+      margin-bottom: 20px;
+      animation: slideDown 0.4s ease-out;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .terms {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 15px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .terms a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    .terms a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .register-card {
+        padding: 35px 25px;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Stars Background -->
+  <div class="stars" id="starsContainer"></div>
+
+  <div class="register-container">
+    <div class="register-card">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <div class="logo-circle">
+          <i class="bi bi-taxi-front-fill"></i>
+        </div>
+        <h2>Welcome to Cabby</h2>
+        <p class="subtitle">Create your account today</p>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- Registration Form -->
+      <form method="post" onsubmit="return validateForm()">
+        <!-- Name Fields -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first_name">
+              <i class="bi bi-person"></i> First Name
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="first_name" 
+              name="first_name" 
+              placeholder="John"
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label for="last_name">
+              <i class="bi bi-person"></i> Last Name
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="last_name" 
+              name="last_name" 
+              placeholder="Doe"
+              required
+            >
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label for="username">
+            <i class="bi bi-at"></i> Username
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="username" 
+            name="username" 
+            placeholder="Choose a unique username"
+            required
+          >
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">
+            <i class="bi bi-envelope"></i> Email Address
+          </label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            name="email" 
+            placeholder="your.email@example.com"
+            required
+          >
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">
+            <i class="bi bi-telephone"></i> Phone Number
+          </label>
+          <input 
+            type="tel" 
+            class="form-control" 
+            id="phone" 
+            name="phone" 
+            placeholder="+91 98765 43210"
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">
+            <i class="bi bi-lock"></i> Password
+          </label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            name="password" 
+            placeholder="Enter a strong password"
+            required
+            minlength="6"
+          >
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="register-btn">
+          <i class="bi bi-person-plus"></i> Create Account
+        </button>
+
+        <!-- Login Link -->
+        <div class="login-link">
+          Already have an account? <a href="/login">Login here</a>
+        </div>
+
+        <!-- Terms -->
+        <div class="terms">
+          By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Generate random stars
+    function createStars() {
+      const container = document.getElementById('starsContainer');
+      for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        container.appendChild(star);
+      }
+    }
+    createStars();
+
+    // Form Validation
+    function validateForm() {
+      const password = document.getElementById('password').value;
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return false;
+      }
+
+      if (username.length < 3) {
+        alert('Username must be at least 3 characters long');
+        return false;
+      }
+
+      if (!email.includes('@')) {
+        alert('Please enter a valid email address');
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>

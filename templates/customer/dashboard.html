@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+    .navbar-custom {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .navbar-brand {color: white !important; font-weight: 700; font-size: 1.3rem;}
+    .nav-link {color: rgba(255,255,255,0.9) !important; margin: 0 8px; font-weight: 500; transition: all 0.3s;}
+    .nav-link:hover {color: white !important; transform: translateY(-2px);}
+    .dashboard-container {max-width: 1400px; margin: 30px auto; padding: 0 20px;}
+    h2 {color: #2d3748; font-weight: 700; margin-bottom: 30px;}
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px 25px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s;
+      border-left: 4px solid #667eea;
+    }
+    .stat-card:hover {transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0,0,0,0.12);}
+    .stat-card h5 {color: #64748b; font-size: 0.95rem; margin-bottom: 15px; font-weight: 600;}
+    .stat-card .number {font-size: 2.5rem; font-weight: 700; color: #667eea;}
+    .stat-card.blue {border-left-color: #3b82f6;} .stat-card.blue .number {color: #3b82f6;}
+    .stat-card.teal {border-left-color: #14b8a6;} .stat-card.teal .number {color: #14b8a6;}
+    .stat-card.green {border-left-color: #10b981;} .stat-card.green .number {color: #10b981;}
+    .btn-action {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-action:hover {transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.4); color: white;}
+    .table-section {background: white; border-radius: 16px; padding: 30px; margin-top: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);}
+    .table-section h5 {color: #2d3748; font-weight: 700; margin-bottom: 20px;}
+    .table {color: #2d3748;}
+    .table thead {background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); color: #475569;}
+    .table tbody tr {transition: all 0.2s;}
+    .table tbody tr:hover {background: #f8fafc;}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="/customer/dashboard">
+        <i class="bi bi-person-circle"></i> Welcome, Cabby
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/customer/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a class="nav-link" href="/customer/my-bookings"><i class="bi bi-card-list"></i> My Bookings</a>
+        <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <h2><i class="bi bi-person-circle"></i> Customer Dashboard</h2>
+
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card blue">
+          <h5>Pending Bookings</h5>
+          <div class="number">{{ pending }}</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card teal">
+          <h5>Active Rides</h5>
+          <div class="number">{{ active }}</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card green">
+          <h5>Completed</h5>
+          <div class="number">{{ completed }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <a href="/customer/create-booking" class="btn btn-action">
+        <i class="bi bi-plus-circle"></i> New Booking
+      </a>
+    </div>
+
+    <div class="table-section">
+      <h5><i class="bi bi-clock-history"></i> Recent Bookings</h5>
+      <table class="table table-hover">
+        <thead>
+          <tr><th>ID</th><th>Pickup</th><th>Dropoff</th><th>Status</th><th>Fare</th></tr>
+        </thead>
+        <tbody>
+          {% for booking in recent %}
+          <tr>
+            <td><strong>#{{ booking.id }}</strong></td>
+            <td>{{ booking.pickup_address }}</td>
+            <td>{{ booking.dropoff_address }}</td>
+            <td>
+              {% if booking.status == 'assigned' %}
+                <span class="badge bg-success">Assigned</span>
+              {% elif booking.status == 'pending' %}
+                <span class="badge bg-warning text-dark">Pending</span>
+              {% else %}
+                <span class="badge bg-info">{{ booking.status }}</span>
+              {% endif %}
+            </td>
+            <td><strong>₹{{ booking.fare_estimate }}</strong></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="text-center text-muted">No bookings yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

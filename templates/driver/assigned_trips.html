@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Assigned Trips{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-road"></i> Assigned Trips</h2>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Pickup</th>
+                        <th>Dropoff</th>
+                        <th>Distance</th>
+                        <th>Fare</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trip in trips %}
+                    <tr>
+                        <td>#{{ trip.id }}</td>
+                        <td>{{ trip.customer.first_name }}</td>
+                        <td>{{ trip.pickup_address[:20] }}</td>
+                        <td>{{ trip.dropoff_address[:20] }}</td>
+                        <td>{{ trip.distance_km }} km</td>
+                        <td>₹{{ trip.fare_estimate }}</td>
+                        <td><span class="badge bg-info">{{ trip.status }}</span></td>
+                        <td>
+                            {% if trip.status == 'assigned' %}
+                            <button class="btn btn-sm btn-success" onclick="startTrip({{ trip.id }})">Start</button>
+                            {% elif trip.status == 'en_route' %}
+                            <button class="btn btn-sm btn-primary" onclick="completeTrip({{ trip.id }})">Complete</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function startTrip(id) {
+    fetch(`/driver/start-trip/${id}`, {method: 'POST'}).then(r => r.json()).then(d => {
+        if (d.success) { location.reload(); }
+    });
+}
+function completeTrip(id) {
+    fetch(`/driver/complete-trip/${id}`, {method: 'POST'}).then(r => r.json()).then(d => {
+        if (d.success) { location.reload(); }
+    });
+}
+</script>
+{% endblock %}
